@@ -1,20 +1,32 @@
-- uses: azure/login@v1
-  with:
-    creds: ${{ secrets.AZURE_CREDENTIALS }}
+name: Build and deploy my docker image to an Azure Web App
 
-name: Linux Container Node Workflow
-on: [push]
+env:
+  AZURE_WEBAPP_NAME: your-app-name  # set this to the name of your Azure Web App
+
+on:
+  push:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-    - uses: azure/docker-login@v1
-      with:
-        login-server: docker.io
-        username: ${{ secrets.REGISTRY_USERNAME }}
-        password: ${{ secrets.REGISTRY_PASSWORD }}
-    - run: |
-        docker build . -t ibene/tic-tac-toe:${{ github.sha }}
-        docker push ibene/tic-tac-toe:${{ github.sha }}
+      - uses: actions/checkout@v3
+
+      - name: Log in to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+      - name: Log in to Docker container registry
+        run: |
+          docker login -u ${{ secrets.REGISTRY_USERNAME }} -p ${{ secrets.REGISTRY_PASSWORD }}
+
+      - name: Build and push container image to registry
+        run: |
+          docker build . -t ibene/tic-tac-toe:${{ github.sha }}
+          docker push ibene/tic-tac-toe:${{ github.sha }}
