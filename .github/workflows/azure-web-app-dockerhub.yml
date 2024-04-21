@@ -27,7 +27,7 @@ jobs:
 
       - uses: azure/webapps-deploy@v2
         with:
-          app-name: 'myapp'
+          app-name: 'mytictactoe'
           images: 'docker.io/ibene/tic-tac-toe:${{ github.sha }}'
         
       - name: Azure logout
