@@ -22,8 +22,8 @@ jobs:
 
       - name: Build and push container image to registry
         run: |
-          docker build . -t ibene/tic-tac-toe:${{ github.sha }}
-          docker push ibene/tic-tac-toe:${{ github.sha }}
+          docker build . -t ibene/tic-tac-toe:${{ github.sha }} -t ibene/tic-tac-toe:latest
+          docker push --all-tags ibene/tic-tac-toe
 
       - uses: azure/webapps-deploy@v2
         with:
