@@ -26,10 +26,10 @@ jobs:
           docker push ibene/tic-tac-toe:${{ github.sha }}
 
       - uses: azure/webapps-deploy@v2
-          with:
-            app-name: 'myapp'
-            images: 'docker.io/ibene/tic-tac-toe:${{ github.sha }}'
+        with:
+          app-name: 'myapp'
+          images: 'docker.io/ibene/tic-tac-toe:${{ github.sha }}'
         
       - name: Azure logout
         run: |
-        az logout
+          az logout
