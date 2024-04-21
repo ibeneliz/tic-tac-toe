@@ -1,14 +1,8 @@
 name: Build and deploy my docker image to an Azure Web App
 
-env:
-  AZURE_WEBAPP_NAME: your-app-name  # set this to the name of your Azure Web App
-
 on:
   push:
     branches: [ "main" ]
-
-permissions:
-  contents: read
 
 jobs:
   build:
@@ -30,3 +24,12 @@ jobs:
         run: |
           docker build . -t ibene/tic-tac-toe:${{ github.sha }}
           docker push ibene/tic-tac-toe:${{ github.sha }}
+
+      - uses: azure/webapps-deploy@v2
+          with:
+            app-name: 'myapp'
+            images: 'docker.io/ibene/tic-tac-toe:${{ github.sha }}'
+        
+      - name: Azure logout
+        run: |
+        az logout
